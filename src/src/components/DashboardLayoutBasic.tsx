@@ -2,58 +2,60 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
+
+import MoreHorizOutlined from '@mui/icons-material/MoreHorizOutlined';
+
+import { VerticalSplitOutlined, HomeOutlined, SettingsOutlined, InfoOutlined, ExtensionOutlined, Margin } from '@mui/icons-material';
+
 import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
 
+import './style.css'; // 引入 CSS 文件
+
 const NAVIGATION: Navigation = [
   {
     kind: 'header',
-    title: 'Main items',
+    title: '常用',
   },
   {
-    segment: 'dashboard',
-    title: 'Dashboard',
-    icon: <DashboardIcon />,
+    segment: 'welcome',
+    title: '欢迎',
+    icon: <VerticalSplitOutlined />,
   },
   {
-    segment: 'orders',
-    title: 'Orders',
-    icon: <ShoppingCartIcon />,
+    segment: 'home',
+    title: '首页',
+    icon: <HomeOutlined />,
   },
   {
     kind: 'divider',
   },
   {
     kind: 'header',
-    title: 'Analytics',
+    title: '其他',
   },
   {
-    segment: 'reports',
-    title: 'Reports',
-    icon: <BarChartIcon />,
+    segment: 'more',
+    title: '更多设置',
+    icon: <MoreHorizOutlined />,
     children: [
       {
-        segment: 'sales',
-        title: 'Sales',
-        icon: <DescriptionIcon />,
+        segment: 'settings',
+        title: '设置',
+        icon: <SettingsOutlined />,
       },
       {
-        segment: 'traffic',
-        title: 'Traffic',
-        icon: <DescriptionIcon />,
+        segment: 'about',
+        title: '关于',
+        icon: <InfoOutlined />,
       },
     ],
   },
   {
-    segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
+    segment: 'plugins',
+    title: '插件',
+    icon: <ExtensionOutlined />,
   },
 ];
 
@@ -74,17 +76,34 @@ const demoTheme = createTheme({
 });
 
 function DemoPageContent({ pathname }: { pathname: string }) {
+  console.log('Current pathname:', pathname); // 输出调试信息
   return (
     <Box
       sx={{
-        py: 4,
+        // 不需要元素内边距
+        // py: 4,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
+        margin: '2.5rem',
+        // 亦不需要元素居中
+        // alignItems: 'center',
+        // textAlign: 'center',
       }}
     >
-      <Typography>Dashboard content for {pathname}</Typography>
+      {/* <Typography>Dashboard content for {pathname}</Typography> */}
+      {pathname === '/welcome' ? (
+        <Typography className='Main-title' variant="h5" color="primary" style={{ fontWeight: 700 }}>
+          欢迎使用 KFACBT's Toolkit！
+        </Typography>
+      ) : pathname === '/home' ? (
+        <Typography className='Main-title' variant="h5" color="secondary">
+          Home Page Content
+        </Typography>
+      ) : (
+        <Typography variant="body1">
+          Dashboard content for {pathname}
+        </Typography>
+      )}
     </Box>
   );
 }
@@ -109,6 +128,11 @@ export default function DashboardLayoutBasic(props: DemoProps) {
     // preview-start
     <AppProvider
       navigation={NAVIGATION}
+      branding={{
+        logo: <img src="src/src/assets/img/Logo.png" alt="KFACBT's Toolkit Logo" />,
+        title: 'KFACBT\'s Toolkit',
+        homeUrl: '.',
+      }}
       router={router}
       theme={demoTheme}
       window={demoWindow}
