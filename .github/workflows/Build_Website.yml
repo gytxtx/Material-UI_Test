@@ -1,0 +1,41 @@
+name: 构建并部署项目
+
+# 在 push 时触发 GitHub Actions 事件
+on: push
+
+# 指定写入权限
+permissions:
+  contents: write
+
+jobs:
+  npm-build:
+    name: npm build 步骤
+    # 使用 Ubuntu 的最新版镜像进行构建
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: 切换至 src 目录
+      run: |
+        cd src
+        echo "当前目录：$(pwd)"
+
+    - name: 使用 https://github.com/actions/checkout 来获取 repo 内容
+      uses: actions/checkout@v4
+
+    - name: 安装依赖项
+      run: |
+        cd src
+        npm install
+
+    - name: 构建项目
+      run: |
+        cd src
+        npm run build
+
+    - name: 部署到 GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: src/build
+
+
