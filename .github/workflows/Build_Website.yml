@@ -14,28 +14,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: 切换至 src 目录
-      run: |
-        cd src
-        echo "当前目录：$(pwd)"
-
     - name: 使用 https://github.com/actions/checkout 来获取 repo 内容
       uses: actions/checkout@v4
 
+    - name: 查看文件结构
+      run: ls -al
+
+    - name: 切换至 src 目录
+      run: |
+        if [ -d "src" ]; then
+          cd src
+          echo "当前目录：$(pwd)"
+        else
+          echo "src 目录不存在"
+        fi
+
     - name: 安装依赖项
       run: |
-        cd src
-        npm install
+        if [ -d "src" ]; then
+          cd src
+          npm install
+        else
+          echo "src 目录不存在，跳过安装"
+        fi
 
     - name: 构建项目
       run: |
-        cd src
-        npm run build
+        if [ -d "src" ]; then
+          cd src
+          npm run build
+        else
+          echo "src 目录不存在，跳过构建"
+        fi
 
     - name: 部署到 GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
         folder: src/build
-
-
